@@ -1,0 +1,79 @@
+# Node.js dependencies
+node_modules/
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# IDE Configuration Files
+.vscode/
+
+# Local Environment Variables
+.env
+.env.local
+.env.example
+
+# Logs
+logs/
+*.log
+
+# Build artifacts
+build/
+dist/
+coverage/
+
+# npm-specific
+package-lock.json
+
+# Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.vscode/
+
+# System Files
+*.iml
+*.swp
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+
+# Configuration Files
+config.json
+
+# Session, Cache, and Temporary Files
+*.session
+*.cache
+.tmp/
+*.tmp
+
+# Public Directory (if you have one for static files)
+public/
+!public/.htaccess
+
+# Testing Files
+test-results/
+test-reports/
+
+# Coverage Reports
+coverage/
+nyc_output/
+
+# Docker
+.docker/
+docker-compose*
+dockerfile*
+Dockerfile*
+docker-compose.override.yml
+
+# System and Project Directories
+/nbproject/
+/build/
+/deploy/

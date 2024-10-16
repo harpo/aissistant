@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your AIssistant</title>
+    <link id="pagestyle" rel="stylesheet" href="/css/style1.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="header">
+            <h2>Your AIssistant</h2>
+            <div class="api-selector">
+                <label for="apiSelect">Select API:</label>
+                <select id="apiSelect">
+                    <option value="anthropic">Anthropic</option>
+                    <option value="groq">Groq</option>
+                    <option value="openai">OpenAI</option>
+                </select>
+            </div>
+            <div class="style-switcher">
+                <label for="style-switcher">Select Theme:</label>
+                <button onclick="switchStyle('style1')">Monokai Pro</button>
+                <button onclick="switchStyle('style2')">Source Code X</button>
+                <button onclick="switchStyle('style3')">Catppuccin</button>
+                <button onclick="switchStyle('style4')">Kurayami</button>
+                <button onclick="switchStyle('style5')">Midnight Sentinel</button>
+                <button onclick="switchStyle('style6')">Gruvbox</button>
+            </div>
+        </div>
+        
+        <div class="conversation-section">
+            <div id="conversation-history">
+                <% if (typeof conversation !== 'undefined' && conversation.length > 0) { %>
+                    <% conversation.forEach(function(message) { %>
+                        <div class="message <%= message.role %>">
+                            <strong><%= message.role === 'user' ? 'You' : 'AI' %>: </strong>
+                            <% if (message.role === 'assistant') { %>
+                                <%- marked.parse(message.content) %>
+                            <% } else { %>
+                                <%= message.content %>
+                            <% } %>
+                        </div>
+                    <% }); %>
+                <% } %>
+            </div>
+        </div>
+        
+        <div class="input-section">
+            <form id="queryForm" action="/generate" method="post">
+                <textarea id="userInput" name="userInput" rows="3" placeholder="Enter your query" required></textarea>
+                <div class="button-group">
+                    <button type="submit">Send</button>
+                    <button id="exportMarkdown" type="button">Export as Markdown</button>
+                    <button type="button" id="clearContext" onclick="clearContext()">Clear Context</button>
+                </div>
+            </form>
+        </div>
+        
+        <% if (typeof error !== 'undefined') { %>
+            <div class="error-message">
+                <%= error %>
+            </div>
+        <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+    function scrollConversationDown() {
+        var conversationHistory = document.getElementById('conversation-history');
+        var messages = conversationHistory.getElementsByClassName('message');
+        if (messages.length >= 2) {
+            var lastUserMessage = null;
+            var lastAIMessage = null;
+            
+            // Find the last user message and AI message
+            for (var i = messages.length - 1; i >= 0; i--) {
+                if (!lastAIMessage && messages[i].classList.contains('assistant')) {
+                    lastAIMessage = messages[i];
+                } else if (!lastUserMessage && messages[i].classList.contains('user')) {
+                    lastUserMessage = messages[i];
+                    break;
+                }
+            }
+            
+            if (lastUserMessage && lastAIMessage) {
+                var scrollPosition = lastUserMessage.offsetTop - conversationHistory.clientHeight / 2;
+                conversationHistory.scrollTo({
+                    top: scrollPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    }
+        
+    function addMessageToConversation(role, content) {
+        var conversationHistory = document.getElementById('conversation-history');
+        var messageDiv = document.createElement('div');
+        messageDiv.className = 'message ' + role;
+        messageDiv.innerHTML = '<strong>' + (role === 'user' ? 'You' : 'AI') + ': </strong>';
+    
+        if (role === 'assistant') {
+            messageDiv.innerHTML += marked.parse(content);
+        } else {
+            messageDiv.innerText += content;
+        }
+    
+        conversationHistory.appendChild(messageDiv);
+    }
+    
+    document.getElementById('queryForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var userInput = document.getElementById('userInput').value;
+        var selectedAPI = document.getElementById('apiSelect').value;
+        addMessageToConversation('user', userInput);
+        
+        scrollConversationDown();
+        
+        fetch('/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userInput: userInput,
+                selectedAPI: selectedAPI
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.response) {
+                addMessageToConversation('assistant', data.response);
+                setTimeout(scrollConversationDown, 100); // Delay to ensure content is rendered
+            } else if (data.error) {
+                console.error('Server error:', data.error);
+                addMessageToConversation('assistant', 'An error occurred. Please try again.');
+            }
+            document.getElementById('userInput').value = '';
+        })
+        .catch((error) => {
+            console.error('Fetch error:', error);
+            addMessageToConversation('assistant', 'An error occurred. Please try again.');
+        });
+    });
+    
+    function switchStyle(styleName) {
+        document.getElementById('pagestyle').setAttribute('href', '/css/' + styleName + '.css');
+        localStorage.setItem('preferredStyle', styleName);
+    }
+    
+    window.addEventListener('load', function() {
+        var preferredStyle = localStorage.getItem('preferredStyle') || 'style1';
+        switchStyle(preferredStyle);
+        scrollConversationDown(50);
+    });
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('clearContext').addEventListener('click', function() {
+            clearContext();
+        });
+
+        function clearContext() {
+            fetch('/clear', { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('conversation-history').innerHTML = '';
+                        console.log('Context cleared successfully');
+                    } else {
+                        console.error('Failed to clear context');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    });
+    
+    document.getElementById('exportMarkdown').addEventListener('click', function() {
+        var conversationHistory = document.getElementById('conversation-history');
+        var messages = conversationHistory.getElementsByClassName('message');
+        var markdownContent = '';
+    
+        for (var i = 0; i < messages.length; i++) {
+            var role = messages[i].classList.contains('user') ? 'You' : 'AI';
+            var content = messages[i].innerText.split('\n').slice(1).join('\n').trim();
+            markdownContent += `## ${role}:\n\n${content}\n\n`;
+        }
+    
+        var blob = new Blob([markdownContent], {type: "text/markdown;charset=utf-8"});
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'conversation.md';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+    </script>
+</body>
+</html>
