@@ -55,7 +55,7 @@ config.json
 *.tmp
 
 # Public Directory (if you have one for static files)
-public/
+#public/
 !public/.htaccess
 
 # Testing Files

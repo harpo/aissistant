@@ -1,0 +1,263 @@
+/* General Styles */
+@import url('https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100..900;1,100..900&display=swap');
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Overpass', sans-serif;
+    background-color: #0A0A0A; /* Slightly darker background */
+    color: #E0E0E0; /* Light grey text */
+    line-height: 1.6;
+    overflow: hidden;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Header Styles */
+.header {
+    flex: 0 0 auto;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h3 {
+    color: #FF6B6B; /* Softer red for headers */
+    margin: 0 0 10px 0;
+}
+
+.style-switcher {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.style-switcher button {
+    background-color: #1A1A1A;
+    color: #E0E0E0;
+    border: 1px solid #333333;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+
+.style-switcher button:hover {
+    background-color: #2A2A2A;
+}
+
+/* API Selector Styles */
+.api-selector {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.api-selector label {
+    margin-right: 10px;
+    color: #FF6B6B; /* Softer red, matching the header color */
+}
+
+#apiSelect {
+    background-color: #1A1A1A;
+    color: #E0E0E0;
+    border: 1px solid #333333;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#apiSelect:hover, #apiSelect:focus {
+    background-color: #2A2A2A;
+    outline: none;
+}
+
+#apiSelect option {
+    background-color: #0A0A0A;
+}
+
+/* Conversation Section Styles */
+.conversation-section {
+    flex: 1;
+    background-color: #1A1A1A;
+    border-radius: 5px;
+    border: 1px solid #333333;
+    overflow: hidden;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+#conversation-history {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    scroll-behavior: smooth;
+}
+
+.message {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    word-wrap: break-word;
+    max-width: 80%;
+}
+
+.message.user {
+    background-color: #2A2A2A;
+    border-left: 3px solid #FF6B6B; /* Softer red */
+    align-self: flex-end;
+}
+
+.message.assistant {
+    background-color: #1F1F1F;
+    border-left: 3px solid #4ECDC4; /* Teal */
+    align-self: flex-start;
+}
+
+.message strong {
+    color: #FF6B6B; /* Softer red for user/AI labels */
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Input Section Styles */
+.input-section {
+    flex: 0 0 auto;
+    background-color: #1A1A1A;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #333333;
+}
+
+.input-section form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-section textarea {
+    width: 100%;
+    height: 100px;
+    background-color: #0A0A0A;
+    border: 1px solid #333333;
+    color: #E0E0E0;
+    resize: none;
+    border-radius: 3px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.button-group button {
+    flex: 1;
+    background-color: #FF6B6B; /* Softer red */
+    color: #0A0A0A;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+
+.button-group button:hover {
+    background-color: #FF8E8E; /* Lighter red on hover */
+}
+
+.button-group #exportMarkdown {
+    background-color: #4ECDC4; /* Teal */
+}
+
+.button-group #exportMarkdown:hover {
+    background-color: #6EE7DE; /* Lighter teal on hover */
+}
+
+/* Code and Pre Styles */
+pre, code {
+    background-color: #0A0A0A;
+    border: 1px solid #333333;
+    border-radius: 4px;
+    padding: 10px;
+    overflow: auto;
+    margin: 10px 0;
+}
+
+code {
+    color: #4ECDC4; /* Teal for code */
+    padding: 2px 4px;
+    border-radius: 2px;
+    font-family: 'Fira Code', monospace;
+}
+
+/* Links */
+a {
+    color: #45B7D1; /* Light blue for links */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #6EE7DE; /* Lighter teal on hover */
+}
+
+/* Error Message */
+.error-message {
+    background-color: #FF6B6B; /* Softer red */
+    color: #0A0A0A;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .chat-container {
+        padding: 10px;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .api-selector {
+        margin-top: 10px;
+    }
+
+    .style-switcher, .button-group {
+        flex-direction: column;
+    }
+
+    .button-group button {
+        width: 100%;
+    }
+
+    .message {
+        max-width: 100%;
+    }
+
+    .input-section {
+        padding: 10px;
+    }
+
+    .input-section textarea {
+        height: 80px;
+    }
+}
