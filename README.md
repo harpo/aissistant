@@ -21,26 +21,31 @@ This application was built for personal home usage only as there is no user acco
 ## Installation
 
 1. Clone the repository:
-git clone https://github.com/yourusername/aissistant.git
+
+```
+git clone https://github.com/harpo/aissistant.git
 cd aissistant
+```
+
 
 
 2. Install dependencies:
-npm install
+`npm install`
 
 
 3. Create a `.env` file in the root directory and add your API keys and a secure cookie password:
+```
 ANTHROPIC_API_KEY=your_api_key_here
 GROQ_API_KEY=your_api_key_here
 OPENAI_API_KEY=your_api_key_here
 COOKIE_PASSWORD=your_secure_cookie_password_here
 PORT=3000
-
+```
 
 ## Usage
 
 1. Start the server:
-npm start
+`npm start`
 
 
 2. Open a web browser and navigate to `http://localhost:3000`.
