@@ -13,7 +13,7 @@ require('dotenv').config();
 const init = async () => {
     const server = Hapi.server({
         port: process.env.PORT || 3000,
-        host: 'localhost',
+        host: '0.0.0.0',
         routes: {
             files: {
                 relativeTo: Path.join(__dirname, 'public')
@@ -121,7 +121,7 @@ const init = async () => {
 
                 if (selectedAPI === 'anthropic') {
                     const response = await anthropic.messages.create({
-                        model: "claude-3-5-sonnet-20240620",
+                        model: "claude-3-5-sonnet-20241022",
                         max_tokens: 4096,
                         temperature: 0.1,
                         top_p: 0.95,
@@ -133,7 +133,7 @@ const init = async () => {
                     const response = await openai.chat.completions.create({
                         model: "gpt-4o-mini", // or another appropriate model
                         messages: [
-                            { role: "system", content: "You are a Sponge Bob like character who always answers with a funnny twist." },
+                            { role: "system", content: "You're a nonchalant like The Dude from The Big Lebowski." },
                             ...conversationHistory
                         ],
                         max_tokens: 4096,
